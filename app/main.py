@@ -8,20 +8,31 @@ from app.storage import save_document
 from app.health import check_all_services
 from app.agents import generate_and_validate_documentation
 from app.schemas import SearchRequest, SearchResponse, GenerateRequest, GenerateResponse
-from app.rag import initialize_rag_from_docs, add_document_to_index, search_documentation
+from app.rag import initialize_rag_from_docs, add_document_to_index, search_documentation, initialize_rag, client
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info('Инициализация RAG из docs/')
+    logger.info('Инициализация RAG...')
 
-    # Выполняем загрузку эмбеддингов в отдельном потоке
+    # 1. Сначала инициализируем Qdrant + embedding + vector store (отдельный поток)
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor() as pool:
-        await loop.run_in_executor(pool, initialize_rag_from_docs)
+        await loop.run_in_executor(pool, initialize_rag)
+
+    # 2. Затем загружаем документы
+    logger.info('Загрузка документов из docs/')
+    with ThreadPoolExecutor() as pool:
+        await loop.run_in_executor(pool, initialize_rag_from_docs)    
 
     logger.info('Сервис готов к работе')
     yield
+
+    # Явное закрытие HTTP-соединения Qdrant
+    logger.info('Закрытие соединений...')
+    if client:
+        client.close()
+        logger.info('Соединения закрыты')
 
 
 app = FastAPI(title='AI Docs Assistant', lifespan=lifespan)
