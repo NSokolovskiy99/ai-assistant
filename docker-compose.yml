@@ -4,7 +4,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./docs:/app/docs  
+      - ./docs:/app/docs
+      - ./logs:/app/logs  
     depends_on:
       - qdrant
     env_file: .env

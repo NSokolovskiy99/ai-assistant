@@ -1,0 +1,11 @@
+FROM ./mistral-7b-instruct-v0.3-q4_k_m.gguf
+ADAPTER ./lora_adapter.gguf
+TEMPLATE """[INST] {{ range $index, $_ := .Messages }}
+{{- if eq .Role "system" }}{{ .Content }}
+
+{{ else if eq .Role "user" }}{{ .Content }}[/INST]
+{{- else if eq .Role "assistant" }} {{ .Content }}</s>[INST] {{ end }}
+{{- end }}"""
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+PARAMETER temperature 0.0
