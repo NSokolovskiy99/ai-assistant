@@ -339,6 +339,7 @@ uvicorn app.main:app --reload
 ```bash
 pytest tests/
 ```
+pytest tests/ -v --disable-warnings 
 
 ## Разработка
 
