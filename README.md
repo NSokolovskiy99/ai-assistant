@@ -118,7 +118,7 @@ VECTOR_SIZE=1024  # Размерность вектора эмбеддингов
    PARAMETER stop "<|im_end|>"
    PARAMETER temperature 0.0
    ```
-4. Перейдите в наш репозиторий на Hugging Face: [NikSokol99/mistral-api-docs-tuned](https://huggingface.co).
+4. Перейдите в репозиторий на Hugging Face: [https://huggingface.co/NikSokol99/mistral-api-docs-tuned].
 5. Скачайте оба файла весов из вкладки **Files and versions** и положите их в созданную временную папку (рядом с `Modelfile`):
 
 
@@ -147,7 +147,7 @@ ollama create my-api-docs -f ./Modelfile
 ollama pull mxbai-embed-large
 ```
 
-### 5. Запуск через Docker Compose (рекомендуется)
+### 6. Запуск через Docker Compose (рекомендуется)
 
 ```bash
 docker-compose up --build
@@ -155,7 +155,7 @@ docker-compose up --build
 
 Сервис будет доступен по адресу: `http://localhost:8000`
 
-### 6. Запуск локально
+### 7. Запуск локально
 
 Если вы запускаете локально (без Docker), убедитесь, что Qdrant запущен:
 
